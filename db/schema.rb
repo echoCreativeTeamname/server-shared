@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150301150334) do
+ActiveRecord::Schema.define(version: 20150328200633) do
 
   create_table "authentication_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -22,17 +22,9 @@ ActiveRecord::Schema.define(version: 20150301150334) do
   create_table "ingredients", force: :cascade do |t|
     t.string  "uuid",        limit: 255
     t.string  "name",        limit: 255
-    t.integer "healthclass", limit: 4
+    t.integer "healthclass", limit: 4,   default: 1
+    t.string  "imageurl",    limit: 255
   end
-
-  create_table "recipe_ingredients", id: false, force: :cascade do |t|
-    t.integer "recipe_id",     limit: 4,   null: false
-    t.integer "ingredient_id", limit: 4,   null: false
-    t.string  "amount",        limit: 255
-  end
-
-  add_index "ingredients_recipes", ["ingredient_id"], name: "index_ingredients_recipes_on_ingredient_id", using: :btree
-  add_index "ingredients_recipes", ["recipe_id"], name: "index_ingredients_recipes_on_recipe_id", using: :btree
 
   create_table "openinghours", force: :cascade do |t|
     t.integer "store_id",    limit: 4
@@ -50,6 +42,15 @@ ActiveRecord::Schema.define(version: 20150301150334) do
     t.string   "amount",        limit: 255
     t.datetime "lastupdated"
   end
+
+  create_table "recipeingredients", force: :cascade do |t|
+    t.integer "recipe_id",     limit: 4
+    t.integer "ingredient_id", limit: 4
+    t.string  "amount",        limit: 255
+  end
+
+  add_index "recipeingredients", ["ingredient_id"], name: "index_recipeingredients_on_ingredient_id", using: :btree
+  add_index "recipeingredients", ["recipe_id"], name: "index_recipeingredients_on_recipe_id", using: :btree
 
   create_table "recipes", force: :cascade do |t|
     t.string  "uuid",        limit: 255
@@ -75,7 +76,7 @@ ActiveRecord::Schema.define(version: 20150301150334) do
     t.string   "uuid",        limit: 255
     t.string   "name",        limit: 255
     t.integer  "priceclass",  limit: 4
-    t.integer  "healthclass", limit: 4
+    t.integer  "healthclass", limit: 4,   default: 1
     t.datetime "lastupdated"
   end
 
