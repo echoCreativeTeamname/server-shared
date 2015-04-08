@@ -20,6 +20,8 @@ class User < ActiveRecord::Base
     vegan: false # Is user vegan?
   }
 
+  has_secure_password
+
   validates :email, :password,  presence: true
   validates_format_of :email, :with => /[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,6}/
   has_many :settings, class_name: "UserSetting", dependent: :destroy
@@ -61,7 +63,6 @@ class User < ActiveRecord::Base
       radius = 0.05
       begin
         stores = ::Store.where(latitude: (self.latitude-radius)..(self.latitude+radius), longitude: (self.longitude-radius)..(self.longitude+radius))
-        n_results = stores.size
         radius = radius + 0.05
       end until stores.size > 10
 
