@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150328200633) do
+ActiveRecord::Schema.define(version: 20150412130030) do
 
   create_table "authentication_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -26,12 +26,16 @@ ActiveRecord::Schema.define(version: 20150328200633) do
     t.string  "imageurl",    limit: 255
   end
 
+  add_index "ingredients", ["uuid"], name: "index_ingredients_on_uuid", unique: true, using: :btree
+
   create_table "openinghours", force: :cascade do |t|
     t.integer "store_id",    limit: 4
     t.date    "date"
     t.time    "openingtime"
     t.time    "closingtime"
   end
+
+  add_index "openinghours", ["date"], name: "index_openinghours_on_date", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "uuid",          limit: 255
@@ -41,7 +45,11 @@ ActiveRecord::Schema.define(version: 20150328200633) do
     t.decimal  "price",                     precision: 7, scale: 2
     t.string   "amount",        limit: 255
     t.datetime "lastupdated"
+    t.string   "identifier",    limit: 255
   end
+
+  add_index "products", ["identifier"], name: "index_products_on_identifier", using: :btree
+  add_index "products", ["uuid"], name: "index_products_on_uuid", unique: true, using: :btree
 
   create_table "recipeingredients", force: :cascade do |t|
     t.integer "recipe_id",     limit: 4
@@ -64,6 +72,8 @@ ActiveRecord::Schema.define(version: 20150328200633) do
     t.float   "cookingtime", limit: 24
   end
 
+  add_index "recipes", ["uuid"], name: "index_recipes_on_uuid", unique: true, using: :btree
+
   create_table "recipes_users", id: false, force: :cascade do |t|
     t.integer "recipe_id", limit: 4, null: false
     t.integer "user_id",   limit: 4, null: false
@@ -80,6 +90,8 @@ ActiveRecord::Schema.define(version: 20150328200633) do
     t.datetime "lastupdated"
   end
 
+  add_index "storechains", ["uuid"], name: "index_storechains_on_uuid", unique: true, using: :btree
+
   create_table "stores", force: :cascade do |t|
     t.string   "uuid",        limit: 255
     t.integer  "chain_id",    limit: 4
@@ -93,6 +105,8 @@ ActiveRecord::Schema.define(version: 20150328200633) do
     t.datetime "lastupdated"
   end
 
+  add_index "stores", ["uuid"], name: "index_stores_on_uuid", unique: true, using: :btree
+
   create_table "stores_users", id: false, force: :cascade do |t|
     t.integer "store_id", limit: 4, null: false
     t.integer "user_id",  limit: 4, null: false
@@ -101,6 +115,18 @@ ActiveRecord::Schema.define(version: 20150328200633) do
   add_index "stores_users", ["store_id"], name: "index_stores_users_on_store_id", using: :btree
   add_index "stores_users", ["user_id"], name: "index_stores_users_on_user_id", using: :btree
 
+  create_table "unmatched_recipes", force: :cascade do |t|
+    t.string  "name",        limit: 255
+    t.text    "contents",    limit: 65535
+    t.text    "summary",     limit: 65535
+    t.string  "imageurl",    limit: 255
+    t.string  "videourl",    limit: 255
+    t.string  "dish_type",   limit: 255
+    t.integer "portions",    limit: 4
+    t.float   "cookingtime", limit: 24
+    t.text    "ingredients", limit: 65535
+  end
+
   create_table "user_settings", force: :cascade do |t|
     t.integer "user_id", limit: 4
     t.string  "key",     limit: 255
@@ -108,14 +134,16 @@ ActiveRecord::Schema.define(version: 20150328200633) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "uuid",       limit: 255
-    t.string "email",      limit: 255
-    t.string "password",   limit: 255
-    t.string "city",       limit: 255
-    t.string "postalcode", limit: 255
-    t.string "street",     limit: 255
-    t.float  "latitude",   limit: 24
-    t.float  "longitude",  limit: 24
+    t.string "uuid",            limit: 255
+    t.string "email",           limit: 255
+    t.string "password_digest", limit: 255
+    t.string "city",            limit: 255
+    t.string "postalcode",      limit: 255
+    t.string "street",          limit: 255
+    t.float  "latitude",        limit: 24
+    t.float  "longitude",       limit: 24
   end
+
+  add_index "users", ["uuid"], name: "index_users_on_uuid", unique: true, using: :btree
 
 end
