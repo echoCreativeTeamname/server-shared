@@ -36,12 +36,10 @@ class Recipe < ActiveRecord::Base
       cost << storechain_cost
     end
 
-    total = 0;
+    total = 0
+    cost.each {|chain_cost| total += chain_cost / cost.size}
 
-    cost.each do |c|
-      total += c / cost.size
-    end
-
-    self.estimated_cost = total
+    self.estimated_cost = total.round(2)
+    self.save
   end
 end
