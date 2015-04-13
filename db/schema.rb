@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150412130030) do
+ActiveRecord::Schema.define(version: 20150413063208) do
 
   create_table "authentication_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -61,15 +61,16 @@ ActiveRecord::Schema.define(version: 20150412130030) do
   add_index "recipeingredients", ["recipe_id"], name: "index_recipeingredients_on_recipe_id", using: :btree
 
   create_table "recipes", force: :cascade do |t|
-    t.string  "uuid",        limit: 255
-    t.string  "name",        limit: 255
-    t.text    "contents",    limit: 65535
-    t.text    "summary",     limit: 65535
-    t.string  "imageurl",    limit: 255
-    t.string  "videourl",    limit: 255
-    t.string  "dish_type",   limit: 255
-    t.integer "portions",    limit: 4
-    t.float   "cookingtime", limit: 24
+    t.string  "uuid",           limit: 255
+    t.string  "name",           limit: 255
+    t.text    "contents",       limit: 65535
+    t.text    "summary",        limit: 65535
+    t.string  "imageurl",       limit: 255
+    t.string  "videourl",       limit: 255
+    t.string  "dish_type",      limit: 255
+    t.integer "portions",       limit: 4
+    t.float   "cookingtime",    limit: 24
+    t.float   "estimated_cost", limit: 24
   end
 
   add_index "recipes", ["uuid"], name: "index_recipes_on_uuid", unique: true, using: :btree
