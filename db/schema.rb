@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413063208) do
+ActiveRecord::Schema.define(version: 20150413205409) do
 
   create_table "authentication_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(version: 20150413063208) do
   end
 
   add_index "products", ["identifier"], name: "index_products_on_identifier", using: :btree
+  add_index "products", ["ingredient_id", "storechain_id"], name: "index_products_on_ingredient_id_and_storechain_id", unique: true, using: :btree
+  add_index "products", ["ingredient_id"], name: "index_products_on_ingredient_id", using: :btree
   add_index "products", ["uuid"], name: "index_products_on_uuid", unique: true, using: :btree
 
   create_table "recipeingredients", force: :cascade do |t|
